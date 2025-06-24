@@ -7,8 +7,8 @@ export const postsRepository = {
         return db.posts;
     },
 
-    findById(id: number): Post | null {
-        return db.posts.find((d) => +d.id === id) ?? null;
+    findById(id: string): Post | null {
+        return db.posts.find((d) => d.id === id) ?? null;
     },
 
     create(newPost: Post): Post {
@@ -16,8 +16,8 @@ export const postsRepository = {
         return newPost;
     },
 
-    update(id: number, dto: PostInputDto): void {
-        const Post = db.posts.find((d) => +d.id === id);
+    update(id: string, dto: PostInputDto): void {
+        const Post = db.posts.find((d) => d.id === id);
 
         if (!Post) {
             throw new Error('Post not exist');
@@ -31,8 +31,8 @@ export const postsRepository = {
         return;
     },
 
-    delete(id: number): void {
-        const index = db.posts.findIndex((v) => +v.id === id);
+    delete(id: string): void {
+        const index = db.posts.findIndex((v) => v.id === id);
 
         if (index === -1) {
             throw new Error('Post not exist');

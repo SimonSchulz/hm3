@@ -7,8 +7,8 @@ export const blogsRepository = {
         return db.blogs;
     },
 
-    findById(id: number): Blog | null {
-        return db.blogs.find((d) => +d.id === id) ?? null;
+    findById(id: string): Blog | null {
+        return db.blogs.find((d) => d.id === id) ?? null;
     },
 
     create(newBlog: Blog): Blog {
@@ -16,8 +16,8 @@ export const blogsRepository = {
         return newBlog;
     },
 
-    update(id: number, dto: BlogInputDto): void {
-        const Blog = db.blogs.find((d) => +d.id === id);
+    update(id: string, dto: BlogInputDto): void {
+        const Blog = db.blogs.find((d) => d.id === id);
 
         if (!Blog) {
             throw new Error('Blog not exist');
@@ -30,8 +30,8 @@ export const blogsRepository = {
         return;
     },
 
-    delete(id: number): void {
-        const index = db.blogs.findIndex((v) => +v.id === id);
+    delete(id: string): void {
+        const index = db.blogs.findIndex((v) => v.id === id);
 
         if (index === -1) {
             throw new Error('Blog not exist');

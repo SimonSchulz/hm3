@@ -24,3 +24,9 @@ const contentValidation = body('content')
 const blogIdValidation = body('blogId')
     .isString()
     .withMessage('blogId should be string');
+export const postInputDtoValidation = [
+    titleValidation,
+    contentValidation,
+    shortDescriptionValidation,
+    blogIdValidation
+]
