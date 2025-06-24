@@ -3,7 +3,7 @@ import { HttpStatus } from '../../../core/types/http-statuses';
 import {Post} from "../../types/post";
 import {PostInputDto} from "../../dto/post.input-dto";
 import {postsRepository} from "../../repositories/post.repository";
-import {PostsRepository} from "../../../Posts/repositories/Post.repository";
+import {blogsRepository} from "../../../blogs/repositories/blog.repository";
 
 export function createPostHandler(
     req: Request<{}, {}, PostInputDto>,
@@ -14,8 +14,8 @@ export function createPostHandler(
         title: req.body.title,
         shortDescription: req.body.shortDescription,
         content: req.body.content,
-        PostId: req.body.PostId,
-        PostName: PostsRepository.findById(req.body.PostId)?.name || ""
+        blogId: req.body.blogId,
+        blogName: blogsRepository.findById(req.body.blogId)?.name || ""
     };
 
     postsRepository.create(newPost);

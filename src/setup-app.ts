@@ -1,5 +1,7 @@
 import express, { Express } from 'express';
 import {BLOGS_PATH, POSTS_PATH} from "./core/paths/paths";
+import {postsRouter} from "./posts/routers/posts.router";
+import {blogsRouter} from "./blogs/routers/blogs.router";
 
 
 export const setupApp = (app: Express) => {
@@ -9,8 +11,8 @@ export const setupApp = (app: Express) => {
         res.status(200).send('hello world!!!');
     });
 
-    app.use(BLOGS_PATH, );
-    app.use(POSTS_PATH, );
+    app.use(BLOGS_PATH, blogsRouter);
+    app.use(POSTS_PATH, postsRouter);
 
     return app;
 };
