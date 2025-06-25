@@ -10,7 +10,7 @@ export function createPostHandler(
     res: Response,
 ) {
     const newPost: Post = {
-        id: new Date().toString(),
+        id: new Date().getTime().toString(),
         title: req.body.title,
         shortDescription: req.body.shortDescription,
         content: req.body.content,

@@ -9,7 +9,7 @@ export function createBlogHandler(
     res: Response,
 ) {
     const newBlog: Blog = {
-        id: new Date().toString(),
+        id: new Date().getTime().toString(),
         name: req.body.name,
         description: req.body.description,
         websiteUrl: req.body.websiteUrl,
