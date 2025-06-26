@@ -5,6 +5,7 @@ import { PostInputDto } from "../../dto/post.input-dto";
 import { postsRepository } from "../../repositories/post.repository";
 import { blogsRepository } from "../../../blogs/repositories/blog.repository";
 import { mapToBlogViewModel } from "../../../blogs/routers/mappers/map-to-blog-view-model";
+import { mapToPostViewModel } from "../mappers/map-to-post-view-model";
 
 export async function createPostHandler(
   req: Request<{}, {}, PostInputDto>,
@@ -26,8 +27,9 @@ export async function createPostHandler(
       createdAt: new Date().toISOString(),
     };
 
-    await postsRepository.create(newPost);
-    res.status(HttpStatus.Created).send(newPost);
+    const post = await postsRepository.create(newPost);
+    const postViewModel = mapToPostViewModel(post);
+    res.status(HttpStatus.Created).send(postViewModel);
   } catch (e: unknown) {
     res.sendStatus(HttpStatus.InternalServerError);
   }
