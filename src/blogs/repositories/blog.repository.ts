@@ -1,43 +1,50 @@
 import {Blog} from "../types/blog";
-import {db} from "../../mock-db/db";
 import {BlogInputDto} from "../dto/blog.input-dto";
+import {ObjectId, WithId} from "mongodb";
+import {blogCollection} from "../../db/mongodb";
 
 export const blogsRepository = {
-    findAll(): Blog[] {
-        return db.blogs;
+    async findAll(): Promise<WithId<Blog>[]> {
+        return blogCollection.find().toArray();
     },
 
-    findById(id: string): Blog | null {
-        return db.blogs.find((d) => d.id === id) ?? null;
+    async findById(id: string):  Promise<WithId<Blog> | null>  {
+        return blogCollection.findOne({_id: new ObjectId(id)});
     },
 
-    create(newBlog: Blog): Blog {
-        db.blogs.push(newBlog);
-        return newBlog;
+    async create(newBlog: Blog): Promise<WithId<Blog>> {
+        const insertResult = await blogCollection.insertOne(newBlog);
+        return { ...newBlog, _id: insertResult.insertedId };
     },
 
-    update(id: string, dto: BlogInputDto): void {
-        const Blog = db.blogs.find((d) => d.id === id);
+    async update(id: string, dto: BlogInputDto): Promise<void> {
+        const updateResult = await blogCollection.updateOne(
+            {
+                _id: new ObjectId(id),
+            },
+            {
+                $set: {
+                    name: dto.name,
+                    description: dto.description,
+                    websiteUrl: dto.websiteUrl,
+                },
+            },
+        );
 
-        if (!Blog) {
+        if (updateResult.matchedCount < 1) {
             throw new Error('Blog not exist');
         }
-
-        Blog.name = dto.name;
-        Blog.description = dto.description;
-        Blog.websiteUrl = dto.websiteUrl;
-
         return;
     },
 
-    delete(id: string): void {
-        const index = db.blogs.findIndex((v) => v.id === id);
+    async delete(id: string): Promise <void> {
+        const deleteResult = await blogCollection.deleteOne({
+            _id: new ObjectId(id),
+        });
 
-        if (index === -1) {
+        if (deleteResult.deletedCount < 1) {
             throw new Error('Blog not exist');
         }
-
-        db.blogs.splice(index, 1);
         return;
     },
 };
